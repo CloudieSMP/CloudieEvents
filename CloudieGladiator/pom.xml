@@ -41,7 +41,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputDirectory>C:\Users\bvver\OneDrive\Documenten\Minecraft Server\Cloudie_Test\plugins</outputDirectory>
+                            <outputDirectory>C:\Users\bvver\OneDrive\Documenten\GitHub\MC-Plugins\CloudieEvents\Server\plugins</outputDirectory>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>shaded</shadedClassifierName>
                         </configuration>

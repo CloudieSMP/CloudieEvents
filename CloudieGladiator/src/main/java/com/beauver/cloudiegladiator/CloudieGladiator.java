@@ -3,14 +3,24 @@ package com.beauver.cloudiegladiator;
 import co.aikar.commands.PaperCommandManager;
 import com.beauver.cloudiegladiator.commands.SendPeople;
 import com.beauver.cloudiegladiator.commands.StartCommand;
+import com.beauver.cloudiegladiator.commands.reloadConfig;
 import com.beauver.cloudiegladiator.listeners.DeathListener;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class CloudieGladiator extends JavaPlugin {
 
+
+    public static List<Player> playersFighting = new ArrayList<>();
+    public static List<ItemStack[]> playersFightingInventory = new ArrayList<>();
     private static CloudieGladiator plugin;
     public static Plugin getPlugin() {
         return plugin;
@@ -21,6 +31,9 @@ public final class CloudieGladiator extends JavaPlugin {
         plugin = this;
         getLogger().info("|---[ CloudieSMP - Gladiator ]---------------------------|");
         getLogger().info("|                                                        |");
+
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
 
         try {
             enableClasses();
@@ -40,6 +53,7 @@ public final class CloudieGladiator extends JavaPlugin {
         PaperCommandManager manager = new PaperCommandManager(this);
         //Moderation commands
         manager.registerCommand(new StartCommand());
+        manager.registerCommand(new reloadConfig());
         manager.registerCommand(new SendPeople());
 
         getLogger().info("|   Enabled commands                                     |");
