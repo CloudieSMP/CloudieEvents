@@ -5,10 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -28,7 +25,9 @@ public class DeathListener implements Listener {
         Plugin plugin = CloudieGladiator.getPlugin();
 
         if(CloudieGladiator.playersFighting.contains(player)){
+            player.getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
             ConfigurationSection spawnLocations = plugin.getConfig().getConfigurationSection("spawnLocations");
+            event.getEntity().getWorld().strikeLightningEffect(event.getEntity().getLocation());
 
             Player player1 = CloudieGladiator.playersFighting.get(0);
             Player player2 = CloudieGladiator.playersFighting.get(1);
@@ -49,32 +48,44 @@ public class DeathListener implements Listener {
 
                 Location spawnLocationAudiance = new Location(player.getWorld(), audienceX, audienceY, audienceZ);
 
-                player1.teleport(spawnLocationAudiance);
-                player2.teleport(spawnLocationAudiance);
-            }
+                if(player1.equals(player)){
+                    Component titleText = Component.text("Congratulations: " + player2.getName() + "!").color(TextColor.fromHexString("#55FF55"));
+                    Component subtitleText = Component.text(player2.getName() + " has won the battle against " + player1.getName()).color(TextColor.fromHexString("#55FF55"));
+                    Title title = Title.title(titleText, subtitleText, Title.Times.times(Duration.ofSeconds(1),Duration.ofSeconds(3),Duration.ofSeconds(1)));
 
-            if(player1.equals(player)){
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        player1.teleport(spawnLocationAudiance);
+                    }, 20);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        player2.teleport(spawnLocationAudiance);
+                    }, 200);
 
-                Component titleText = Component.text("Congratulations: " + player2.getName() + "!").color(TextColor.fromHexString("#55FF55"));
-                Component subtitleText = Component.text(player2.getName() + " has won the battle against " + player1.getName()).color(TextColor.fromHexString("#55FF55"));
-                Title title = Title.title(titleText, subtitleText, Title.Times.times(Duration.ofSeconds(1),Duration.ofSeconds(3),Duration.ofSeconds(1)));
+                    for(Player player3 : Bukkit.getOnlinePlayers()){
+                        player3.showTitle(title);
+                    }
+                }else{
+                    Component titleText = Component.text("Congratulations: " + player1.getName() + "!").color(TextColor.fromHexString("#55FF55"));
+                    Component subtitleText = Component.text(player1.getName() + " has won the battle against " + player2.getName()).color(TextColor.fromHexString("#55FF55"));
+                    Title title = Title.title(titleText, subtitleText, Title.Times.times(Duration.ofSeconds(1),Duration.ofSeconds(3),Duration.ofSeconds(1)));
 
-                for(Player player3 : Bukkit.getOnlinePlayers()){
-                    player3.showTitle(title);
-                }
-            }else{
-                Component titleText = Component.text("Congratulations: " + player1.getName() + "!").color(TextColor.fromHexString("#55FF55"));
-                Component subtitleText = Component.text(player1.getName() + " has won the battle against " + player2.getName()).color(TextColor.fromHexString("#55FF55"));
-                Title title = Title.title(titleText, subtitleText, Title.Times.times(Duration.ofSeconds(1),Duration.ofSeconds(3),Duration.ofSeconds(1)));
+                    player1.setGameMode(GameMode.SURVIVAL);
 
-                for(Player player3 : Bukkit.getOnlinePlayers()){
-                    player3.showTitle(title);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        player2.teleport(spawnLocationAudiance);
+                    }, 20);
+
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        player1.teleport(spawnLocationAudiance);
+                    }, 160);
+
+                    for(Player player3 : Bukkit.getOnlinePlayers()){
+                        player3.showTitle(title);
+                    }
                 }
             }
 
             CloudieGladiator.playersFighting.clear();
             CloudieGladiator.playersFightingInventory.clear();
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "datapack enable \"file/" + plugin.getConfig().getString("gravesPluginName") + "\"");
 
             ConfigurationSection doorLocations = plugin.getConfig().getConfigurationSection("doorLocations");
             if (doorLocations != null) {
@@ -125,6 +136,10 @@ public class DeathListener implements Listener {
                     }, yOffset * 20L);
                 }
             }
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "datapack enable \"file/" + plugin.getConfig().getString("gravesPluginName") + "\"");
+                player.getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
+            }, 180);
         }
     }
 }

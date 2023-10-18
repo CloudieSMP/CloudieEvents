@@ -1,8 +1,10 @@
 package com.beauver.cloudiegladiator;
 
 import co.aikar.commands.PaperCommandManager;
+import com.beauver.cloudiegladiator.classes.KitConfiguration;
 import com.beauver.cloudiegladiator.commands.SendPeople;
 import com.beauver.cloudiegladiator.commands.StartCommand;
+import com.beauver.cloudiegladiator.commands.createKit;
 import com.beauver.cloudiegladiator.commands.reloadConfig;
 import com.beauver.cloudiegladiator.listeners.DeathListener;
 import org.bukkit.entity.Player;
@@ -55,18 +57,20 @@ public final class CloudieGladiator extends JavaPlugin {
         manager.registerCommand(new StartCommand());
         manager.registerCommand(new reloadConfig());
         manager.registerCommand(new SendPeople());
+        manager.registerCommand(new createKit(new KitConfiguration(this)));
 
         getLogger().info("|   Enabled commands                                     |");
     }
 
     public void enableListeners() {
         this.getServer().getPluginManager().registerEvents(new DeathListener(), this);
-
+//        this.getServer().getPluginManager().registerEvents(new KitCreationListener(), this);
         getLogger().info("|   Enabled listeners                                    |");
 
     }
 
     public void enableClasses() throws LoginException, InterruptedException {
+//        KitCreationListener.initialize(this);
         getLogger().info("|   Enabled Classes                                      |");
     }
 

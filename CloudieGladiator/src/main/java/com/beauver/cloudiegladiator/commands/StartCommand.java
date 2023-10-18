@@ -10,10 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -131,6 +128,7 @@ public class StartCommand extends BaseCommand {
             Component subtitleText2 = Component.text("");
             Title title2 = Title.title(titleText2, subtitleText2, Title.Times.times(Duration.ofSeconds(0), Duration.ofSeconds(2), Duration.ofSeconds(1)));
             player3.showTitle(title2);
+            player3.playSound(player3.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1f, 1.0f);
         }
     }
 }
