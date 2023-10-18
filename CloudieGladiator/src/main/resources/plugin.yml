@@ -1,0 +1,7 @@
+name: CloudieGladiator
+version: '${project.version}'
+main: com.beauver.cloudiegladiator.CloudieGladiator
+api-version: '1.20'
+authors: [Beauver]
+description: Gladiator event for the server CloudieSMP
+website: portofolio.beauver.com
