@@ -1,9 +1,0 @@
-com\beauver\cloudiegladiator\commands\createKit.class
-com\beauver\cloudiegladiator\listeners\InventoryCloseListener.class
-com\beauver\cloudiegladiator\listeners\DeathListener.class
-com\beauver\cloudiegladiator\CloudieGladiator.class
-com\beauver\cloudiegladiator\commands\SendPeople.class
-com\beauver\cloudiegladiator\classes\KitConfiguration.class
-com\beauver\cloudiegladiator\classes\Kit.class
-com\beauver\cloudiegladiator\commands\reloadConfig.class
-com\beauver\cloudiegladiator\commands\StartCommand.class
