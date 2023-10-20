@@ -5,9 +5,8 @@ import co.aikar.commands.annotation.*;
 import com.beauver.cloudiegladiator.CloudieGladiator;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -112,6 +111,60 @@ public class SendPeople extends BaseCommand {
         player1.getInventory().setContents(inventoryPlayer1);
         player2.getInventory().setContents(inventoryPlayer2);
 
+        ConfigurationSection doorLocations = plugin.getConfig().getConfigurationSection("doorLocations");
+        if (doorLocations != null) {
+            double doorX = doorLocations.getDouble("centerBottomDoor1.x");
+            double doorY = doorLocations.getDouble("centerBottomDoor1.y");
+            double doorZ = doorLocations.getDouble("centerBottomDoor1.z");
+
+            double door2X = doorLocations.getDouble("centerBottomDoor2.x");
+            double door2Y = doorLocations.getDouble("centerBottomDoor2.y");
+            double door2Z = doorLocations.getDouble("centerBottomDoor2.z");
+
+            int doorWidth = plugin.getConfig().getInt("doorWidth");
+            int doorHeight = plugin.getConfig().getInt("doorHeight");
+
+            for (int yOffset = 0; yOffset < doorHeight; yOffset++) {
+                final int currentYOffset = yOffset;
+
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    for (int xOffset = -doorWidth / 2; xOffset <= doorWidth / 2; xOffset++) {
+                        for (int zOffset = 0; zOffset < 1; zOffset++) {
+                            Location blockLocation = new Location(player.getWorld(), doorX + xOffset, doorY + currentYOffset, doorZ + zOffset);
+                            Block block = blockLocation.getBlock();
+
+                            if (block.getType() == Material.AIR) {
+                                block.setType(Material.IRON_BARS);
+                                player.getWorld().spawnParticle(Particle.CLOUD, blockLocation, 10, 0.1, 0.1, 0.1, 0.1);
+                            }
+                        }
+                    }
+                }, yOffset * 20L);
+            }
+
+            for (int yOffset = 0; yOffset < doorHeight; yOffset++) {
+                final int currentYOffset = yOffset;
+
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    for (int xOffset = -doorWidth / 2; xOffset <= doorWidth / 2; xOffset++) {
+                        for (int zOffset = 0; zOffset < 1; zOffset++) {
+                            Location blockLocation = new Location(player.getWorld(), door2X + xOffset, door2Y + currentYOffset, door2Z + zOffset);
+                            Block block = blockLocation.getBlock();
+
+                            if (block.getType() == Material.AIR) {
+                                block.setType(Material.IRON_BARS);
+                                player.getWorld().spawnParticle(Particle.CLOUD, blockLocation, 10, 0.1, 0.1, 0.1, 0.1);
+                            }
+                        }
+                    }
+                }, yOffset * 20L);
+            }
+        }
+        player1.setHealth(20);
+        player1.setFoodLevel(20);
+        player2.setHealth(20);
+        player2.setFoodLevel(20);
         player.sendMessage(Component.text("Retrieved " + player1.getName() + " and " + player2.getName() + " to the audience!").color(TextColor.fromHexString("#00AA00")));
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "datapack enable \"file/" + plugin.getConfig().getString("gravesPluginName") + "\"");
     }
 }

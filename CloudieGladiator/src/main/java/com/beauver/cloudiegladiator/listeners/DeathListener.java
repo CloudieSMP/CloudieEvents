@@ -53,6 +53,10 @@ public class DeathListener implements Listener {
                     Component subtitleText = Component.text(player2.getName() + " has won the battle against " + player1.getName()).color(TextColor.fromHexString("#55FF55"));
                     Title title = Title.title(titleText, subtitleText, Title.Times.times(Duration.ofSeconds(1),Duration.ofSeconds(3),Duration.ofSeconds(1)));
 
+                    player2.setGameMode(GameMode.SURVIVAL);
+                    player2.setHealth(20);
+                    player2.setFoodLevel(20);
+
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
                         player1.teleport(spawnLocationAudiance);
                     }, 20);
@@ -67,8 +71,10 @@ public class DeathListener implements Listener {
                     Component titleText = Component.text("Congratulations: " + player1.getName() + "!").color(TextColor.fromHexString("#55FF55"));
                     Component subtitleText = Component.text(player1.getName() + " has won the battle against " + player2.getName()).color(TextColor.fromHexString("#55FF55"));
                     Title title = Title.title(titleText, subtitleText, Title.Times.times(Duration.ofSeconds(1),Duration.ofSeconds(3),Duration.ofSeconds(1)));
-
                     player1.setGameMode(GameMode.SURVIVAL);
+
+                    player1.setHealth(20);
+                    player1.setFoodLevel(20);
 
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
                         player2.teleport(spawnLocationAudiance);

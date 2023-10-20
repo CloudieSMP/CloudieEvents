@@ -35,6 +35,11 @@ public class StartCommand extends BaseCommand {
         Player player1 = CloudieGladiator.playersFighting.get(0);
         Player player2 = CloudieGladiator.playersFighting.get(1);
 
+        player1.setHealth(20);
+        player1.setFoodLevel(20);
+        player2.setHealth(20);
+        player2.setFoodLevel(20);
+
         int delay = 100;
         for (Player player3 : Bukkit.getOnlinePlayers()) {
             Component titleText = Component.text(player1.getName() + " VS " + player2.getName()).color(TextColor.fromHexString("#55FF55"));

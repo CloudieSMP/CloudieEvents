@@ -7,10 +7,9 @@ import com.beauver.cloudiegladiator.commands.StartCommand;
 import com.beauver.cloudiegladiator.commands.createKit;
 import com.beauver.cloudiegladiator.commands.reloadConfig;
 import com.beauver.cloudiegladiator.listeners.DeathListener;
+import com.beauver.cloudiegladiator.listeners.InteractionListener;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -64,7 +63,7 @@ public final class CloudieGladiator extends JavaPlugin {
 
     public void enableListeners() {
         this.getServer().getPluginManager().registerEvents(new DeathListener(), this);
-//        this.getServer().getPluginManager().registerEvents(new KitCreationListener(), this);
+        this.getServer().getPluginManager().registerEvents(new InteractionListener(new createKit(new KitConfiguration(this))), this);
         getLogger().info("|   Enabled listeners                                    |");
 
     }

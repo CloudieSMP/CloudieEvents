@@ -13,16 +13,21 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @CommandAlias("cgkit")
@@ -55,7 +60,7 @@ public class createKit extends BaseCommand {
         meta.setCustomModelData(69);
         item.setItemMeta(meta);
 
-        for (int i = 44; i > 36; i--) {
+        for (int i = 44; i > 35; i--) {
             kitInventory.setItem(i, item);
         }
 
@@ -67,6 +72,19 @@ public class createKit extends BaseCommand {
         // Register a new listener to handle interactions and save the kit when the player closes the inventory
         closeListener = new InventoryCloseListener(kit, player, kitConfig);
         Bukkit.getPluginManager().registerEvents(closeListener, CloudieGladiator.getPlugin());
+
+        Bukkit.getPluginManager().registerEvents(new Listener() {
+            @EventHandler
+            public void onInventoryClick(InventoryClickEvent event) {
+                if (event.getWhoClicked() == player && event.getInventory() == kitInventory) {
+                    ItemStack clickedItem = event.getCurrentItem();
+
+                    if(clickedItem != null && clickedItem.getType() == Material.GRAY_STAINED_GLASS_PANE && clickedItem.getItemMeta().getCustomModelData() == 69){
+                        event.setCancelled(true);
+                    }
+                }
+            }
+        }, CloudieGladiator.getPlugin());
     }
 
     @Subcommand("get")
@@ -82,7 +100,7 @@ public class createKit extends BaseCommand {
             kit.setKitName(kitName);
 
             ItemStack[] hotbar = retrieveItemArray(config, "kits." + kitName + ".hotbar", 9);
-            ItemStack[] inventory = retrieveItemArray(config, "kits." + kitName + ".inventory", 27);
+            ItemStack[] inventory = retrieveItemArray(config, "kits." + kitName + ".inventory", 45);
 
             kit.setHotbar(hotbar);
             kit.setInventory(inventory);
@@ -143,5 +161,22 @@ public class createKit extends BaseCommand {
             return true;
         }
         return false;
+    }
+
+    public List<String> listKitNames() {
+        Plugin plugin = CloudieGladiator.getPlugin();
+
+        List<String> kitNames = new ArrayList<>();
+        KitConfiguration kitConfig = new KitConfiguration(plugin);
+        FileConfiguration config = kitConfig.getConfig();
+
+        if (config.contains("kits")) {
+            ConfigurationSection kitsSection = config.getConfigurationSection("kits");
+            if (kitsSection != null) {
+                kitNames.addAll(kitsSection.getKeys(false)); // Add all kit names to the list
+            }
+        }
+
+        return kitNames;
     }
 }
