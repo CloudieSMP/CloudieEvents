@@ -1,0 +1,6 @@
+name: CloudieCrazy
+version: '${project.version}'
+main: com.beauver.cloudiecrazy.CloudieCrazy
+api-version: '1.20'
+authors: [Beauver]
+description: A dedicated plugin for a funny thing
