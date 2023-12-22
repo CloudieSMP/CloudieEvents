@@ -1,5 +1,5 @@
 name: CloudieCrazy
-version: 'Release-1.1'
+version: 'v1.20.4-Release-1.1'
 main: com.beauver.cloudiecrazy.CloudieCrazy
 api-version: '1.20'
 authors: [Beauver]
